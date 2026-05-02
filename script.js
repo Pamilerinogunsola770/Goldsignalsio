@@ -123,9 +123,66 @@ function initForexGraph() {
   drawGraph();
 }
 
+// Auto-scroll to contact section after 3 seconds on first load
+function initAutoScroll() {
+  const hasVisited = sessionStorage.getItem('goldSignalsVisited');
+  if (!hasVisited) {
+    setTimeout(() => {
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 3000);
+    sessionStorage.setItem('goldSignalsVisited', 'true');
+  }
+}
+
+// Logo scroll button handlers
+function initLogoScroll() {
+  const heroLogo = document.getElementById('logo-scroll-btn');
+  const scrollLogoContainer = document.getElementById('scrollLogo');
+  const scrollLogoBtn = document.getElementById('scroll-logo-btn');
+  const heroSection = document.querySelector('.hero-section');
+
+  // Hero logo click - scroll to contact
+  if (heroLogo) {
+    heroLogo.addEventListener('click', () => {
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Scroll logo click - scroll back to hero
+  if (scrollLogoBtn) {
+    scrollLogoBtn.addEventListener('click', () => {
+      if (heroSection) {
+        heroSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Show/hide scroll logo on scroll
+  window.addEventListener('scroll', () => {
+    if (heroSection) {
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+      const isScrolled = window.pageYOffset > heroBottom * 0.5;
+      
+      if (isScrolled) {
+        scrollLogoContainer.classList.add('active');
+      } else {
+        scrollLogoContainer.classList.remove('active');
+      }
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   initCarousel();
   initLinks();
   initForexGraph();
+  initAutoScroll();
+  initLogoScroll();
 });
   
